@@ -1,0 +1,41 @@
+<section class="admin-products-new">
+
+  <header class="page-header">
+    <h1>Admin &raquo; New Review</h1>
+  </header>
+
+  <div class="well">
+    <%= link_to 'Back to Product', :back, class: 'btn btn-info' %>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-1">
+
+    <%= form_for [@product, @review] do |form| %>
+
+      <% if form.object.errors.any? %>
+        <div class="alert alert-danger">
+          <strong>The following errors prevented saving:</strong>
+          <ul>
+            <% form.object.errors.full_messages.each do |error| %>
+              <li><%= error %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :rating %>
+        <%= form.select :rating, [nil, 1, 2, 3, 4, 5], :selected => nil, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description %>
+        <%= form.text_area :description, class: 'form-control' %>
+      </div>
+
+      <%= form.submit 'Create Review', class: 'btn btn-primary' %>
+
+    <% end %>
+
+</section>

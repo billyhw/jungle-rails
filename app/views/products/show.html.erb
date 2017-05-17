@@ -7,11 +7,9 @@
   <article class="product-detail">
 
     <div class="row">
-
       <div class="col-sm-4">
         <%= image_tag @product.image.url, class: 'main-img' %>
       </div>
-
       <div class="col-sm-8">
         <dl class="dl-horizontal">
           <dt>Name</dt>
@@ -26,6 +24,63 @@
       </div>
     </div>
 
+<% if current_user %>
+    <%= form_for [@product, @review] do |form| %>
+
+      <% if form.object.errors.any? %>
+        <div class="alert alert-danger">
+          <strong>The following errors prevented saving:</strong>
+          <ul>
+            <% form.object.errors.full_messages.each do |error| %>
+              <li><%= error %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :rating %>
+        <%= form.select :rating, [nil, 1, 2, 3, 4, 5], :selected => nil, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description %>
+        <%= form.text_area :description, class: 'form-control' %>
+      </div>
+
+      <%= form.submit 'Create Review', class: 'btn btn-primary' %>
+
+    <% end %>
+<% end %>
+
+    <header class="page-header">
+
+      <h1>Customer Reviews</h1>
+
+      <h3> Average Rating:
+        <%= @product.reviews.all.average(:rating).to_f.round(1) %>
+      </h3>
+
+    </header>
+
+  <div class="panel panel-default items">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Review</th>
+          <th>Rating</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @product.reviews.order('created_at desc').each do |details| %>
+          <%= render 'review', details: details %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
   </article>
+
 
 </section>
